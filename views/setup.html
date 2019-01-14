@@ -1,15 +1,38 @@
-<!<!DOCTYPE html>
-<html>
-  <head>
-     <link rel="stylesheet" type="text/css" href="../content/setup.css">
-  </head>
-  <body>
 
-    <div id="room-parent">
-      <div id="room">
+
+<div class="container-fluid col-8 center">
+
+  <div class="row">
+    <div class="page-title text-dark">
+      <h1 style="font-weight:800;">Room Layout</h1>
+      <h2>Drag the tables to their desired location.</h2>
+    </div>
+  </div>
+
+  <div id="row">
+    <div class="col-12 room-input">
+      <div class="col-3 float-left"></div>
+
+        <input type="text" placeholder="Width in mm" class="form-control float-left col-3" id="roomWidth">
+        <input type="text" placeholder="Length in mm" class="form-control float-left col-3" id="roomLength">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-2"></div>
+      <div class="col-8">
+        <div id="room-parent">
+            <div id="room"></div>
+        </div>
       </div>
     </div>
 
 
-  </body>
-</html>
+
+</div>
+
+
+
+
+
+  <script src="controllers/setup.js"></script>

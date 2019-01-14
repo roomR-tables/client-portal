@@ -1,5 +1,6 @@
 /*site controller */
-content = $("#content");
+content1 = $("#content1");
+content2 = $("#content2");
 
 //Get GET variables
 var $_GET = {};
@@ -20,16 +21,32 @@ if(window.location.toString().indexOf('?') !== -1) {
 
 //Loads the right view
 function loadView(){
+  url = "";
   //Load view
   switch($_GET['view']){
-    case "setup":
-      console.log(window.location.href)
-
+    case "404":
+      url = window.location.pathname + "/views/404.html";
       break;
-      content.html($.getJSON(window.location.href + "/views/setup.html"));
     default:
-      content.html("home");
+      url = window.location.pathname + "/views/dashboard.html";
+      break;
   }
-}
+
+  //Load page
+  console.log("Loading " + url);
+  $.get(url, function(data, status){
+    if(status == "success")
+      content1.html(data);
+  });
+
+  $.get(window.location.pathname + "/views/setup.html", function(data, status){
+    if(status == "success")
+      content2.html(data);
+  });
+ }
+
+ function nextPage(){
+   $("#scroller").animate({marginLeft:"-100%"}, "slow", "swing");
+ }
 
 loadView();
