@@ -9,20 +9,44 @@
     </div>
   </div>
 
-  <div id="row">
+  <!-- <div id="row">
     <div class="col-12 room-input">
-      <div class="col-3 float-left"></div>
+      <div class="col-3 "></div>
 
-        <input type="text" placeholder="Width in mm" class="form-control float-left col-3" id="roomWidth">
-        <input type="text" placeholder="Length in mm" class="form-control float-left col-3" id="roomLength">
+        <input type="text" placeholder="Width in mm" class="form-control col-3" id="roomWidth">
+        <!--<input type="text" placeholder="Length in mm" class="form-control col-3" id="roomLength">-->
+
     </div>
   </div>
 
   <div class="row">
-    <div class="col-2"></div>
+    <div class="col-12">
+        <div class="col-4 float-left"></div>
+
+    </div>
+    <div class="col-2">
+      <div class="col-2 height-spacer"></div>
+    </div>
       <div class="col-8">
         <div id="room-parent">
-            <div id="room"></div>
+            <div id="room">
+                <div id="room-entry"></div>
+              <div class=" col-12" id="horizontal-top-bar">
+                <div class="arrowLeft">◄</div>
+                  <div class="arrowRight">►</div>
+                <div class="horizontal-input">
+                    <input type="text" placeholder="Width" onchange="updateRoomWidth()" id="plain-text-input" >
+                </div>
+
+              </div>
+              <div id="vertical-side-bar">
+                <div class="arrowUp">▲</div>
+                <div class="col-12" style="height:40%" ></div>
+                  <input type="text" placeholder="Length" onchange="updateRoomHeight()" id="plain-text-input2" >
+                <div class="arrowDown">▼</div>
+              </div>
+
+            </div>
         </div>
       </div>
     </div>
