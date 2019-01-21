@@ -1,3 +1,10 @@
+import { updateRoomHeight, updateRoomWidth } from "./setup"
+import { mqttClient } from "./socket"
+
+// Connect to the control center
+var client = new mqttClient("raspberrypi.local", 9001, (b) => console.log(b), (b) => console.log(b))
+setTimeout(() => client.getStatusCommand(), 500)
+
 /*site controller */
 var content1 = $("#content1");
 var content2 = $("#content2");
@@ -61,8 +68,8 @@ function loadView() {
  }
 loadView();
 
-module.exports = {
-  nextPage: () => nextPage(),
-  updateRoomWidth: () => updateRoomWidth(),
-  updateRoomHeight: () => updateRoomHeight()
-};
+export {
+  nextPage,
+  updateRoomHeight,
+  updateRoomWidth
+}

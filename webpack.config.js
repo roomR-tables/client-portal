@@ -5,9 +5,10 @@ module.exports = {
     devtool: dev ? 'source-map' : false,
     mode: dev ? 'development' : 'production',
     output: {
-        library: 'app',
+        path: require('path').resolve('dist'),
         filename: 'app.js',
-        path: require('path').resolve('dist')
+        publicPath: "dist/",
+        library: 'app'
     },
     module: {
         rules: [
