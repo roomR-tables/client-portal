@@ -8,7 +8,7 @@ import { isArray } from "util";
 class Main extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { page: 'dashboard', isNew: false, setups: [], currentSetup: null }
+        this.state = { page: 'dashboard', isNew: false, editable: true, setups: [], currentSetup: null }
     }
 
     componentDidMount() {
@@ -18,12 +18,13 @@ class Main extends React.Component {
         this.setState({ setups: !jRooms || !isArray(jRooms) ? [] : jRooms })
     }
 
-    showSetup(sRoomName) {
+    loadSetup(sRoomName, editable) {
         let setup = this.state.setups.find(s => s.sRoomName == sRoomName);
 
         this.setState({
             currentSetup: !setup ? {} : setup,
             isNew: !setup,
+            editable: editable,
             page: 'setup'
         })
     }
@@ -53,7 +54,7 @@ class Main extends React.Component {
             return;
         }
 
-        if (otherSetups.find(r => r.sRoomName == newSetup.sRoomName)) {
+        if (this.state.isNew && otherSetups.find(r => r.sRoomName == newSetup.sRoomName)) {
             if (!confirm("A preset with this name already exists. Do you want to overwrite it?")) {
                 return;
             }
@@ -63,7 +64,11 @@ class Main extends React.Component {
         let newSetups = otherSetups.filter(s => s.sRoomName != newSetup.sRoomName && s.sRoomName != oldSetup.sRoomName)
         newSetups.push(newSetup)
 
-        this.setState({ setups: newSetups, currentSetup: newSetup }, () => localStorage.setItem("aRooms", JSON.stringify(this.state.setups)))
+        this.setState({
+            setups: newSetups,
+            currentSetup: newSetup,
+            isNew: false
+        }, () => localStorage.setItem("aRooms", JSON.stringify(this.state.setups)))
     }
 
     cancel() {
@@ -82,7 +87,7 @@ class Main extends React.Component {
                     <div id="content1">
                         <Dashboard
                             setups={this.state.setups}
-                            showSetup={roomName => this.showSetup(roomName)}
+                            loadSetup={(roomName, editable) => this.loadSetup(roomName, editable)}
                             createSetup={_ => this.createSetup()}
                         />
                     </div>
@@ -91,7 +96,8 @@ class Main extends React.Component {
                             key={this.state.isNew ? new Date().toString() : this.state.currentSetup.sRoomName}
                             setup={this.state.currentSetup}
                             saveSetup={setup => this.saveSetup(setup)}
-                            cancel={_ => this.cancel()}
+                            cancelSetup={_ => this.cancel()}
+                            editable={this.state.editable}
                         />}
                     </div>
                 </div>

@@ -13,10 +13,10 @@ export class Dashboard extends React.Component {
 
                 <div className="row cardLoader mx-auto">
                     {this.props.setups.map((s, k) => (
-                        <div className="col" key={k}>
+                        <div className="col" key={k} onClick={() => this.props.loadSetup(s.sRoomName, false)}>
                             <div className="card float-none mx-auto">
                                 <div className="card-menu">
-                                    <div className="edit-btn bg-lime text-light text-center" onClick={() => this.props.showSetup(s.sRoomName)}>
+                                    <div className="edit-btn bg-lime text-light text-center" onClick={(e) => { e.stopPropagation(); this.props.loadSetup(s.sRoomName, true) }}>
                                         <span className="fas fa-pen"></span>
                                     </div>
                                 </div>
