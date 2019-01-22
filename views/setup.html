@@ -4,6 +4,7 @@
 
   <div class="row">
     <div class="page-title text-dark">
+
       <input type="text" placeholder="Insert Room Name" onchange="setName()" id="roomNameInput" >
       <h2>Drag the tables to their desired location.</h2>
     </div>
@@ -45,15 +46,15 @@
               </div>
 
               <div class="col-12 buttonHandler">
-                <input type="button" onclick="moveTableTowardsOutline()" value="Cancel" class="GridButton bg-cyan"/>
+
+          <div class="font-selection"></div>
+                <input type="button" onclick="prevPage()" value="Cancel" class="GridButton bg-cyan"/>
                   <input type="button" onclick="setNewTablePos()" value="execute" class="GridButton bg-cyan"/>
                   <input type="button" onclick="storeRoom()" value="Save" class="GridButton bg-cyan"/>
                 </div>
-
             </div>
           </div>
         </div>
-
         </div>
       </div>
     </div>

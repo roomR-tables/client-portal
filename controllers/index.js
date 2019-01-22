@@ -3,7 +3,7 @@ content1 = $("#content1");
 content2 = $("#content2");
 
 //Instantiate storage
-//localStorage.setItem("aRooms", []);
+localStorage.setItem("aRooms", "{}");
 
 //Get GET variables
 var $_GET = {};
@@ -51,5 +51,7 @@ function loadView(){
  function nextPage(){
    $("#scroller").animate({marginLeft:"-100%"}, "slow", "swing");
  }
-
+ function prevPage(){
+   $("#scroller").animate({marginLeft:"0"}, "slow", "swing");
+ }
 loadView();

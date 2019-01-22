@@ -109,41 +109,37 @@ function setNewTablePos(){
 
 function storeRoom(){
   sRooms = localStorage.getItem("aRooms");
-  jRooms = JSON.parse(sRooms);
-
-  $.map(jRooms, (value, key) => {
-    jRooms[key].fRoomWidth = G_fRoomWidth;
-    jRooms[key].fRoomLength = G_fRoomWidth;
-  });
-
-  //Gathero
-  aData = {};
-  aData["fRoomWidth"] = G_fRoomWidth;
-  aData["fRoomLength"] = G_fRoomLength;
-  aData["fTableWidth"] = G_fTableWidth;
-  aData["fTableLegth"] = G_fTableLength;
-  aData["fOldTablePosX"] = G_fOldTablePosX;
-  aData["fOldTablePosY"] = G_fOldTablePosY;
-  aData["fNewTablePosX"] = G_fNewTablePosX;
-  aData["fNewTablePosY"] = G_fNewTablePosY;
-
-  iIndex = (G_iRoomIndex == null) ? sRooms.length : G_iRoomIndex;
-  dRooms = {};
+  jRooms = JSON.parse(sRooms); //Returns array of objects
+  //Store, Overwrite or cancel
   if(G_sRoomName === ""){
     alert("Invalid room name");
     return;
   }
-  dRooms[G_sRoomName] = aData;
 
+  if(jRooms[G_sRoomName] !== undefined){
+    if(!confirm("A preset with this name already exists. Do you want to overwrite it?")){
+        return;
+    }
+  }
 
-  localStorage.setItem("aRooms", JSON.stringify(dRooms));
+  jRooms[G_sRoomName] = {};
+  jRooms[G_sRoomName].fRoomWidth = G_fRoomWidth;
+  jRooms[G_sRoomName].fRoomLength = G_fRoomLength;
+  jRooms[G_sRoomName].fTableWidth = G_fTableWidth;
+  jRooms[G_sRoomName].fTableLength = G_fTableLength;
+  jRooms[G_sRoomName].fOldTablePosX = G_fOldTablePosX;
+  jRooms[G_sRoomName].fOldTablePosY = G_fOldTablePosY;
+  jRooms[G_sRoomName].fNewTablePosX = G_fNewTablePosX;
+  jRooms[G_sRoomName].fNewTablePosY = G_fNewTablePosY;
+
+  localStorage.setItem("aRooms", JSON.stringify(jRooms));
+  loadPresets();
+  prevPage();
 }
 
 function setName(){
   G_sRoomName = String($("#roomNameInput").val());
 }
-
-
 
 createRoom(G_fRoomWidth, G_fRoomLength, G_eTables, G_eOutlines);
 
@@ -154,3 +150,5 @@ draggable.draggable({
   containment: "parent",
   grid: [ 10, 10 ]
 });
+
+ $('#e1_element').fontIconPicker();

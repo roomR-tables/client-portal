@@ -317,6 +317,16 @@ p{ font-size: 12px; }
 
 }
 
+#e1_element{
+  width: 100px;
+  height: 100px;
+  background-color: grey;
+}
+
+.font-selection{
+  width: 100px;
+  height: 100px;
+}
 
 
 @media(min-width:576px){
