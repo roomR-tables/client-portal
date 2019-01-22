@@ -1,5 +1,6 @@
-import { updateRoomHeight, updateRoomWidth } from "./setup"
+import { updateRoomHeight, updateRoomWidth, createRoom } from "./setup"
 import { mqttClient } from "./socket"
+import { setup } from "./setup"
 
 // Connect to the control center
 var client = new mqttClient("raspberrypi.local", 9001, (b) => console.log(b), (b) => console.log(b))
@@ -69,7 +70,7 @@ function loadView() {
 loadView();
 
 export {
+  setup,
   nextPage,
-  updateRoomHeight,
-  updateRoomWidth
+  prevPage
 }
