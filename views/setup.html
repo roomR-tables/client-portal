@@ -35,14 +35,13 @@
                   <div class="arrowLeft">◄</div>
                     <div class="arrowRight">►</div>
                   <div class="roomWidthInputParent">
-                      <input type="text" placeholder="Insert Width" onchange="updateRoomDimensions()" id="roomWidthInput" >
+                      <input type="number" placeholder="Insert Width" onchange="updateRoomDimensions()" id="roomWidthInput" >
                   </div>
               </div>
               <div id="roomGridSideBar">
                 <div class="arrowUp">▲</div>
                 <div class="col-12" style="height:20%" ></div>
-                  <input type="text" placeholder="Length" onchange="updateRoomDimensions()" id="roomLengthInput" >
-                  <input type="text" placeholder="Length" onchange="updateRoomHeight()" id="plain-text-input2" >
+                  <input type="number" placeholder="Length" onchange="updateRoomDimensions()" id="roomLengthInput" >
                 <div class="arrowDown">▼</div>
               </div>
 
@@ -54,7 +53,6 @@
                   <input type="button" onclick="storeRoom()" value="Save" class="GridButton bg-cyan"/>
                 </div>
             </div>
-          </div>
         </div>
         </div>
       </div>
