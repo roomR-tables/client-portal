@@ -33,8 +33,8 @@ export class Setup extends React.Component {
         let fLength = this.state.fRoomWidth > this.state.fRoomLength ? fTableLength / this.state.fRoomWidth * 100 : fTableLength / this.state.fRoomLength * 100;
 
         return <>
-            <div id="table1" className="table bg-lime" style={{ width: fWidth, height: fLength, top: 0, left: 0 }}>01</div>
-            <div id="outline1" className="table-outline draggable" style={{ width: fWidth, height: fLength, top: this.state.fTablePosY, left: this.state.fTablePosX }}></div>
+            <div id="table1" className="table bg-lime" style={{ width: `${fWidth}%`, height: `${fLength}%`, top: 0, left: 0 }}>01</div>
+            <div id="outline1" className="table-outline draggable" style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.fTablePosY, left: this.state.fTablePosX }}></div>
         </>
     }
 
@@ -119,7 +119,7 @@ export class Setup extends React.Component {
                             </div>
                             <div id="roomGridSideBar">
                                 <div className="arrowUp">▲</div>
-                                <div className="col-12" style={{ height: 20 }}></div>
+                                <div className="col-12" style={{ height: '20%' }}></div>
                                 <input type="number" id="roomLengthInput" value={this.state.fRoomLength} placeholder="Length" onChange={e => this.onChangeRoomDimensions(this.state.fRoomWidth, e.currentTarget.value)} />
                                 <div className="arrowDown">▼</div>
                             </div>
