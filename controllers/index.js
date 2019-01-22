@@ -2,6 +2,9 @@
 content1 = $("#content1");
 content2 = $("#content2");
 
+//Instantiate storage
+//localStorage.setItem("aRooms", []);
+
 //Get GET variables
 var $_GET = {};
 if(window.location.toString().indexOf('?') !== -1) {

@@ -54,7 +54,7 @@ p{ font-size: 12px; }
 #content{
   margin:0 auto;
   width: 100vw;
-  height:90vh;
+  height:100vh;
   overflow: hidden;
 }
 
@@ -120,7 +120,7 @@ p{ font-size: 12px; }
   border-radius: 0 5px 0 5px;
 }
 
-.room-input{
+.roomWidthInputParent{
   float:none;
   height:50px;
 }
@@ -129,13 +129,20 @@ p{ font-size: 12px; }
   height
 }
 
-.room-entry{
+.roomGrid{
   float: right
   width: 100%;
   height: 100%;
 }
 
-#horizontal-top-bar {
+#roomNameInput{
+  border: none !important;
+  background-color: #e7e7e7;
+  text-align: center;
+  font-weight:800;
+}
+
+#roomGridTopBar {
   padding:0;
   height:50px;
   position: absolute;
@@ -145,7 +152,7 @@ p{ font-size: 12px; }
   overflow: visible;
 }
 
-#vertical-side-bar {
+#roomGridSideBar {
   position: absolute;
   left: -60px;
   top: 0;
@@ -156,22 +163,23 @@ p{ font-size: 12px; }
     overflow: visible;
 }
 
-.horizontal-input{
+.roomWidthInputParent{
   margin:auto;
   max-width:200px;
   height:50px;
   background-color:#e7e7e7
 }
 
-#plain-text-input{
+#roomWidthInput{
   border:none !important;
   background-color: #e7e7e7;
   margin-top: 10px;
   text-align: center;
   }
 
-  #plain-text-input2{
+  #roomLengthInput{
     width: 100%;
+    height:100px;
     border:none !important;
     background-color: #e7e7e7;
     text-align: center;
@@ -180,8 +188,8 @@ p{ font-size: 12px; }
 /* change these dimensions based on screen size */
 #room-parent{
   margin: auto;
-  width:800px;
-  height:800px;
+  width:600px;
+  height:600px;
   position: relative;
 }
 
@@ -241,15 +249,37 @@ p{ font-size: 12px; }
   background-color: #e7e7e7;
 }
 
+.buttonHandler{
+  position: absolute;
+  bottom: -90px;
+  left: 0px;
+  text-align: center;
+}
+
+.GridButton{
+  display: inline-block;
+  margin-right: 20px;
+  width:75px;
+  height:75px;
+  border: none !important;
+  border-radius: 0 10px 0 10px;
+}
 
 
 .table{
+  position: absolute;
   color:white;
   font-weight: 800;
   text-align: center;
   position: absolute;
-  border-radius: 20px;
+  border-radius: 5px;
   line-height:2.5;
+}
+
+.table-outline{
+  position: absolute;
+    border-radius: 5px;
+  border: 5px dotted #acdd44;
 }
 
 

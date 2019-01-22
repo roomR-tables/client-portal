@@ -1,96 +1,153 @@
-data = {
-  "room": {
-    "width": 5000,
-    "depth": 2500
-  },
-  "tables": [
-    {
-      "id": 0,
-      "x": 800,
-      "y": 600,
-      "width": 752,
-      "depth": 501
-    }/*,
-    {
-      "id": 1,
-      "x": 1300,
-      "y": 600,
-      "width": 752,
-      "depth": 501
-    },
-    {
-      "id": 2,
-      "x": 1800,
-      "y": 600,
-      "width": 752,
-      "depth": 501
-    }*/
-  ]
-}
-
-room_width = 10000; //mm
-room_length = 5000; //mm
-
-function createRoom(){
-  // width =  data.room.width > data.room.depth ? 100 : value.y / data.room.width / data.room.depth * 100;
-  // depth = data.room.width > data.room.depth ? data.room.depth / data.room.width * 100 : 100;
-
-  width =  room_width > room_length ? 100 : room_width / room_length * 100;
-  depth = room_width > room_length ? room_length / room_width * 100 : 100;
+/*
+  All javascript utilises the Hungarian Notation depicting the type of the variable as part of it's name.
+  bBusy = Boolean, cLetter = char, aNumbers = array, etc. Globals are denoted by a G_. example: G_bBusy = Global Boolean.
+*/
 
 
 
-  $("#room").animate({
-    "width" : width + "%",
-    "height" : depth +"%"
+const G_eRoomHolder = $("#room");
+const G_eRoomGrid = $("#roomGrid");
+const G_eRoomGridTopBar = $("#roomGridTopBar");
+const G_eRoomGridSideBar = $("#roomGridSideBar");
+const G_eRoomWidthInput = $("#roomWidthInput");
+const G_eRoomLengthInput = $("#roomLengthInput");
+
+G_sRoomName = "";
+G_iRoomIndex = null;
+G_fRoomWidth = 10; //meters
+G_fRoomLength = 5; //meters
+G_fTableWidth = 2; //meters
+G_fTableLength = 1; //meters
+G_fOldTablePosX = 0;
+G_fOldTablePosY = 0;
+G_fNewTablePosX = 0;
+G_fNewTablePosY = 0;
+
+G_eTables = null;
+G_eOutlines = null;
+
+//Create a room based on the percentage of it's aspect ratio. 1:1 == 100%, 100%.
+function createRoom(eTable, eOutline){
+  fWidth =  Number(G_fRoomWidth) > Number(G_fRoomLength) ? 100 : Number(G_fRoomWidth) / Number(G_fRoomLength) * 100;
+  fLength = Number(G_fRoomWidth) > Number(G_fRoomLength) ? Number(G_fRoomLength) / Number(G_fRoomWidth) * 100 : 100;
+
+  //Animate  elements to fit aspect ratio.
+  G_eRoomHolder.animate({
+    "width" : fWidth + "%",
+    "height" : fLength +"%"
   });
 
-  $("#room-entry").animate({
+  G_eRoomGrid.animate({
     "width" : "100%",
     "height" : "100%"
   });
 
-  $("#horizontal-top-bar").animate({
+  G_eRoomGridTopBar.animate({
     "width" : "100%"
   });
 
-  $("#vertical-side-bar").animate({
+  G_eRoomGridSideBar.animate({
     "height" : "100%"
   });
+
+  // if(G_eTables != null){
+  //   G_eTables.animate({
+  //     "width" : G_fRoomWidth > G_fRoomLength ? G_fTableWidth / G_fRoomWidth * 100 : G_fTableWidth / G_fRoomLength * 100,
+  //     "height": G_fRoomWidth > G_fRoomLength ? G_fTableLength / G_fRoomWidth * 100 : G_fTableLength / G_fRoomLength * 100
+  //   });
+  // }
+  //
+  // if(G_eOutlines != null){
+  //   G_eTables.animate({
+  //     "width" : G_fRoomWidth > G_fRoomLength ? G_fTableWidth / G_fRoomWidth * 100 : G_fTableWidth / G_fRoomLength * 100,
+  //     "height": G_fRoomWidth > G_fRoomLength ? G_fTableLength / G_fRoomWidth * 100 : G_fTableLength / G_fRoomLength * 100
+  //   });
+  // }
+
+
 }
 
-function updateRoomWidth(){
-  room_width = $("#plain-text-input").val() * 1000;
-
-  createRoom();
-}
-function updateRoomHeight(){
-  room_length = $("#plain-text-input2").val() * 1000;
-  createRoom();
+//Update the width of the room by reloading it with new values.
+function updateRoomDimensions(){
+  G_fRoomWidth = G_eRoomWidthInput.val().length > 0 ? G_eRoomWidthInput.val() : G_fRoomWidth;
+  G_fRoomLength = G_eRoomLengthInput.val().length > 0 ? G_eRoomLengthInput.val() : G_fRoomLength;
+  createRoom(G_eTables, G_eOutlines);
 }
 
 // draw all tables in json array
-function drawTables( data ){
-  innerHTML = "";
-  $.each(data.tables, function(key, value){
-    // //Get the current position of the
-    // top = (data.room.width > data.room.depth) ? value.y / data.room.width * 100 : value.y / data.room.depth * 100;
-    // left = (data.room.width > data.room.depth) ? value.x / data.room.width * 100 : value.x / data.room.depth * 100;
+function drawTables(fTableWidth, fTableLength ){
+  sInnerHTML = "";
 
-    //Resize table dimensions based on this aspect ratio
-    width = (data.room.width > data.room.depth) ? value.width / data.room.width * 100 : value.width / data.room.depth * 100;
-    height = (data.room.width > data.room.depth) ? value.depth / data.room.width * 100 : value.depth / data.room.depth * 100;
+  //Resize table dimensions based on this aspect ratio
+  fWidth = G_fRoomWidth > G_fRoomLength ? fTableWidth / G_fRoomWidth * 100 : fTableWidth / G_fRoomLength * 100;
+  fLength = G_fRoomWidth > G_fRoomLength ? fTableLength / G_fRoomWidth * 100 : fTableLegth / G_fRoomLength * 100;
 
-    innerHTML += "<div class='table bg-lime draggable' style='width:"+width+"%;height:"+height+"%;top:"+ value.y / data.room.width * 100 +"%;left="+ value.x / data.room.width * 100+"%;'>ID: "+value.id+"</div>";
-  })
-  roomEntry = $("#room-entry");
-  roomEntry.html(innerHTML);
+  sInnerHTML += "<div id='table1' class='table bg-lime' style='width:"+fWidth+"%;height:"+fLength+"%;top:0;left:0;'>01</div>";
+  sInnerHTML += "<div id='outline1' class='table-outline draggable' style='width:"+fWidth+"%;height:"+fLength+"%;top:0;left:0;'></div>";
 
+  G_eRoomGrid.html(sInnerHTML);
+
+  G_eTables = $(".table*");
+  G_eOutlines = $(".outline*");
 }
 
-createRoom();
+function setNewTablePos(){
+  //Open socket
+  //Alter position based on feedback
+  outline = $("#outline1");
+  table = $("#table1");
+  G_fOldTablePosX = table.css("left");
+  G_fOldTablePosY = table.css("top");
+  G_fNewTablePosX = outline.css("left");
+  G_fNewTablePosY = outline.css("top");
 
-drawTables(data);
+  $("#table1").animate({
+    top: outline.css("top"),
+    left: outline.css("left")
+  }, "slow");
+}
+
+function storeRoom(){
+  sRooms = localStorage.getItem("aRooms");
+  jRooms = JSON.parse(sRooms);
+
+  $.map(jRooms, (value, key) => {
+    jRooms[key].fRoomWidth = G_fRoomWidth;
+    jRooms[key].fRoomLength = G_fRoomWidth;
+  });
+
+  //Gathero
+  aData = {};
+  aData["fRoomWidth"] = G_fRoomWidth;
+  aData["fRoomLength"] = G_fRoomLength;
+  aData["fTableWidth"] = G_fTableWidth;
+  aData["fTableLegth"] = G_fTableLength;
+  aData["fOldTablePosX"] = G_fOldTablePosX;
+  aData["fOldTablePosY"] = G_fOldTablePosY;
+  aData["fNewTablePosX"] = G_fNewTablePosX;
+  aData["fNewTablePosY"] = G_fNewTablePosY;
+
+  iIndex = (G_iRoomIndex == null) ? sRooms.length : G_iRoomIndex;
+  dRooms = {};
+  if(G_sRoomName === ""){
+    alert("Invalid room name");
+    return;
+  }
+  dRooms[G_sRoomName] = aData;
+
+
+  localStorage.setItem("aRooms", JSON.stringify(dRooms));
+}
+
+function setName(){
+  G_sRoomName = String($("#roomNameInput").val());
+}
+
+
+
+createRoom(G_fRoomWidth, G_fRoomLength, G_eTables, G_eOutlines);
+
+drawTables(G_fTableWidth, G_fTableLength);
 
 draggable = $(".draggable");
 draggable.draggable({
