@@ -3,12 +3,15 @@ import * as ReactDOM from "react-dom"
 
 import { Dashboard } from "./dashboard.jsx"
 import { Setup } from "./setup.jsx"
-import { isArray } from "util";
+import { isArray } from "util"
+import { MqttClient } from "./mqtt"
 
 class Main extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { page: 'dashboard', isNew: false, editable: true, setups: [], currentSetup: null }
+        this.state = { page: 'dashboard', isNew: false, editable: true, setups: [], currentSetup: [], selectedSetup: null }
+
+        this.mqttClient = new MqttClient((message) => this.onMqttMessage(message))
     }
 
     componentDidMount() {
@@ -16,13 +19,30 @@ class Main extends React.Component {
         let jRooms = JSON.parse(sRooms);
 
         this.setState({ setups: !jRooms || !isArray(jRooms) ? [] : jRooms })
+        setInterval(() => this.mqttClient.send("cc/cmd", JSON.stringify({ cmd: "request_status" })), 500)
+    }
+
+    onMqttMessage(message) {
+        try {
+            let jMessageBody = JSON.parse(message.payloadString)
+            console.log(jMessageBody)
+            switch (message.destinationName) {
+                case "cc/status":
+                    this.setState({ currentSetup: jMessageBody })
+                    return;
+            }
+        } catch (e) {
+            console.error(`Error on parsing mqtt message: ${message.payloadString}`)
+            console.error(e)
+        }
+
     }
 
     loadSetup(sRoomName, editable) {
         let setup = this.state.setups.find(s => s.sRoomName == sRoomName);
 
         this.setState({
-            currentSetup: !setup ? {} : setup,
+            selectedSetup: !setup ? {} : setup,
             isNew: !setup,
             editable: editable,
             page: 'setup'
@@ -31,12 +51,12 @@ class Main extends React.Component {
 
     createSetup() {
         this.setState({
-            currentSetup: {
+            selectedSetup: {
                 sRoomName: "",
                 fRoomWidth: 10,
                 fRoomLength: 5,
-                fTableWidth: 2,
-                fTableLength: 1,
+                fTableWidth: 0.70,
+                fTableLength: 0.50,
                 fTablePosX: 0,
                 fTablePosY: 0
             },
@@ -46,7 +66,7 @@ class Main extends React.Component {
     }
 
     saveSetup(newSetup) {
-        let oldSetup = this.state.currentSetup
+        let oldSetup = this.state.selectedSetup
         let otherSetups = this.state.setups
 
         if (!newSetup.sRoomName) {
@@ -66,7 +86,7 @@ class Main extends React.Component {
 
         this.setState({
             setups: newSetups,
-            currentSetup: newSetup,
+            selectedSetup: newSetup,
             isNew: false
         }, () => localStorage.setItem("aRooms", JSON.stringify(this.state.setups)))
     }
@@ -92,13 +112,14 @@ class Main extends React.Component {
                         />
                     </div>
                     <div id="content2">
-                        {this.state.currentSetup && <Setup
-                            key={this.state.isNew ? new Date().toString() : this.state.currentSetup.sRoomName}
-                            setup={this.state.currentSetup}
+                        {this.state.selectedSetup && this.state.currentSetup ? <Setup
+                            key={this.state.isNew ? new Date().toString() : this.state.selectedSetup.sRoomName}
+                            preferredSetup={this.state.selectedSetup}
+                            editable={this.state.editable}
+                            currentSetup={this.state.currentSetup}
                             saveSetup={setup => this.saveSetup(setup)}
                             cancelSetup={_ => this.cancel()}
-                            editable={this.state.editable}
-                        />}
+                        /> : <p>Loading current setup...</p>}
                     </div>
                 </div>
             </div>

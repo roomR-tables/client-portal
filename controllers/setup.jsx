@@ -3,7 +3,7 @@ import * as React from "react"
 export class Setup extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { ...this.props.setup }
+        this.state = { preferredSetup: this.props.preferredSetup, currentSetup: this.props.currentSetup }
 
         this.G_fTableWidth = 2; //meters
         this.G_fTableLength = 1; //meters
@@ -27,27 +27,41 @@ export class Setup extends React.Component {
         this.resizeRoom()
     }
 
+    static getDerivedStateFromProps(props, state) {
+        // Will properly cause a ugly rerender of the grid
+        if (props.currentSetup != state.currentSetup) {
+            return {
+                ...state,
+                currentSetup: props.currentSetup
+            }
+        }
+
+        return state
+    }
+
     drawTable(fTableWidth, fTableLength) {
         //Resize table dimensions based on this aspect ratio
-        let fWidth = (fTableWidth / this.state.fRoomWidth) * 100;
-        let fLength = (fTableLength / this.state.fRoomLength) * 100;
+        let fWidth = (fTableWidth / this.state.preferredSetup.fRoomWidth) * 100;
+        let fLength = (fTableLength / this.state.preferredSetup.fRoomLength) * 100;
 
         // When editable only the table is shown and draggable. Otherwise the outline is the preferd position and the table the actual
         if (this.props.editable) {
             return <>
-                <div id="table1" className={`table bg-lime draggable`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.fTablePosY, left: this.state.fTablePosX }}>01</div>
+                <div id="table1" className={`table bg-lime draggable`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.preferredSetup.fTablePosY, left: this.state.preferredSetup.fTablePosX }}>01</div>
             </>
         }
 
+        let currentSetup = this.props.currentSetup
+
         return <>
-            <div id="table1" className={`table bg-lime`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: 0, left: 0 }}>01</div>
-            <div id="outline1" className="table-outline" style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.fTablePosY, left: this.state.fTablePosX }}></div>
+            <div id="table1" className={`table bg-lime`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: currentSetup.y_pos, left: currentSetup.x_pos }}>01</div>
+            <div id="outline1" className="table-outline" style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.preferredSetup.fTablePosY, left: this.state.preferredSetup.fTablePosX }}></div>
         </>
     }
 
     resizeRoom() {
-        let fWidth = this.state.fRoomWidth > this.state.fRoomLength ? 100 : this.state.fRoomWidth / this.state.fRoomLength * 100;
-        let fLength = this.state.fRoomWidth > this.state.fRoomLength ? this.state.fRoomLength / this.state.fRoomWidth * 100 : 100;
+        let fWidth = this.state.preferredSetup.fRoomWidth > this.state.preferredSetup.fRoomLength ? 100 : this.state.preferredSetup.fRoomWidth / this.state.preferredSetup.fRoomLength * 100;
+        let fLength = this.state.preferredSetup.fRoomWidth > this.state.preferredSetup.fRoomLength ? this.state.preferredSetup.fRoomLength / this.state.preferredSetup.fRoomWidth * 100 : 100;
 
         //Animate  elements to fit aspect ratio.
         this.G_eRoomHolder.animate({
@@ -102,8 +116,9 @@ export class Setup extends React.Component {
                         <input
                             type="text"
                             placeholder="Insert Room Name"
-                            value={this.state.sRoomName}
+                            value={this.state.preferredSetup.sRoomName}
                             onChange={e => this.setState({ sRoomName: e.currentTarget.value })}
+                            disabled={!this.props.editable}
                             id="roomNameInput"
                         />
                         <h2>Drag the tables to their desired location.</h2>
@@ -121,7 +136,7 @@ export class Setup extends React.Component {
                     <div id="room-parent">
                         <div id="room">
                             <div id="roomGrid">
-                                {this.drawTable(this.state.fTableWidth, this.state.fTableLength)}
+                                {this.drawTable(this.state.preferredSetup.fTableWidth, this.state.preferredSetup.fTableLength)}
                             </div>
                             <div className=" col-12" id="roomGridTopBar">
                                 <div className="arrowLeft">◄</div>
@@ -130,9 +145,10 @@ export class Setup extends React.Component {
                                     <input
                                         type="number"
                                         id="roomWidthInput"
-                                        value={this.state.fRoomWidth}
+                                        value={this.state.preferredSetup.fRoomWidth}
                                         placeholder="Insert Width"
-                                        onChange={e => this.onChangeRoomDimensions(e.currentTarget.value, this.state.fRoomLength)}
+                                        disabled={!this.props.editable}
+                                        onChange={e => this.onChangeRoomDimensions(e.currentTarget.value, this.state.preferredSetup.fRoomLength)}
                                     />
                                 </div>
                             </div>
@@ -142,9 +158,10 @@ export class Setup extends React.Component {
                                 <input
                                     type="number"
                                     id="roomLengthInput"
-                                    value={this.state.fRoomLength}
+                                    value={this.state.preferredSetup.fRoomLength}
                                     placeholder="Length"
-                                    onChange={e => this.onChangeRoomDimensions(this.state.fRoomWidth, e.currentTarget.value)}
+                                    disabled={!this.props.editable}
+                                    onChange={e => this.onChangeRoomDimensions(this.state.preferredSetup.fRoomWidth, e.currentTarget.value)}
                                 />
                                 <div className="arrowDown">▼</div>
                             </div>

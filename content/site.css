@@ -269,19 +269,21 @@ p{ font-size: 12px; }
 
 
 .table{
-  position: absolute;
+  /* Use position relative to prevent drag issues with jQuery draggable*/
+  position: relative;
+  display: inline-block;
+  margin: 0;
   color:white;
   font-weight: 800;
   text-align: center;
-  position: absolute;
   border-radius: 5px;
   line-height:2.5;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
 .table-outline{
-  /* Use position relative to prevent drag issues with jQuery draggable*/
-  position: relative;
+  position: absolute;
   border-radius: 5px;
   border: 5px dotted #acdd44;
   cursor: pointer;
