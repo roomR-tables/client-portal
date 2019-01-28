@@ -61,6 +61,7 @@ class Main extends React.Component {
                 fTablePosY: 0
             },
             isNew: true,
+            editable: true,
             page: 'setup'
         })
     }
@@ -88,11 +89,14 @@ class Main extends React.Component {
             setups: newSetups,
             selectedSetup: newSetup,
             isNew: false
-        }, () => localStorage.setItem("aRooms", JSON.stringify(this.state.setups)))
+        }, () => {
+            localStorage.setItem("aRooms", JSON.stringify(this.state.setups))
+            alert("Your setup has been saved.")
+        })
     }
 
     cancel() {
-        this.setState({ page: 'dashboard', currentSetup: {} })
+        this.setState({ page: 'dashboard', selectedSetup: null })
     }
 
     render() {
@@ -113,7 +117,7 @@ class Main extends React.Component {
                     </div>
                     <div id="content2">
                         {this.state.selectedSetup && this.state.currentSetup ? <Setup
-                            key={this.state.isNew ? new Date().toString() : this.state.selectedSetup.sRoomName}
+                            key={`${this.state.selectedSetup.sRoomName}_${this.state.editable}`}
                             preferredSetup={this.state.selectedSetup}
                             editable={this.state.editable}
                             currentSetup={this.state.currentSetup}
