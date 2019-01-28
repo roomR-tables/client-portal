@@ -4,9 +4,6 @@ export class Setup extends React.Component {
     constructor(props) {
         super(props)
         this.state = { preferredSetup: this.props.preferredSetup, currentSetup: this.props.currentSetup }
-
-        this.G_fTableWidth = 2; //meters
-        this.G_fTableLength = 1; //meters
     }
 
     componentDidMount() {
@@ -27,8 +24,8 @@ export class Setup extends React.Component {
         this.resizeRoom()
     }
 
+    // This makes sure that the current position is updated without a complete re-render of the component
     static getDerivedStateFromProps(props, state) {
-        // Will properly cause a ugly rerender of the grid
         if (props.currentSetup != state.currentSetup) {
             return {
                 ...state,
@@ -83,15 +80,20 @@ export class Setup extends React.Component {
         });
     }
 
+    onChangeRooomName(sRoomName) {
+        this.setState(prevState => ({ preferredSetup: { ...prevState.preferredSetup, sRoomName: sRoomName } }))
+    }
+
     onChangeRoomDimensions(fRoomWidth, fRoomLength) {
-        this.setState({ fRoomWidth: Number(fRoomWidth), fRoomLength: Number(fRoomLength) }, () => this.resizeRoom())
+        this.setState(prevState => ({ preferredSetup: { ...prevState.preferredSetup, fRoomWidth: Number(fRoomWidth), fRoomLength: Number(fRoomLength) } }), () =>
+            this.resizeRoom())
     }
 
     onSaveSetup() {
         let fNewTablePosX = this.G_eTable.css("left");
         let fNewTablePosY = this.G_eTable.css("top");
 
-        this.props.saveSetup({ ...this.state, fTablePosX: fNewTablePosX, fTablePosY: fNewTablePosY });
+        this.props.saveSetup({ ...this.state.preferredSetup, fTablePosX: fNewTablePosX, fTablePosY: fNewTablePosY });
     }
 
     onExecute() {
@@ -117,7 +119,7 @@ export class Setup extends React.Component {
                             type="text"
                             placeholder="Insert Room Name"
                             value={this.state.preferredSetup.sRoomName}
-                            onChange={e => this.setState({ sRoomName: e.currentTarget.value })}
+                            onChange={e => this.onChangeRooomName(e.currentTarget.value)}
                             disabled={!this.props.editable}
                             id="roomNameInput"
                         />
