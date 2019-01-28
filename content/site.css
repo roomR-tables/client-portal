@@ -279,6 +279,9 @@ p{ font-size: 12px; }
   border-radius: 5px;
   line-height:2.5;
   cursor: pointer;
+}
+
+.table--animated {
   transition: all 0.3s;
 }
 

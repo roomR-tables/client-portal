@@ -51,7 +51,7 @@ export class Setup extends React.Component {
         let currentSetup = this.props.currentSetup
 
         return <>
-            <div id="table1" className={`table bg-lime`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: currentSetup.y_pos, left: currentSetup.x_pos }}>01</div>
+            <div id="table1" className={`table table--animated bg-lime`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: currentSetup.y_pos, left: currentSetup.x_pos }}>01</div>
             <div id="outline1" className="table-outline" style={{ width: `${fWidth}%`, height: `${fLength}%`, top: this.state.preferredSetup.fTablePosY, left: this.state.preferredSetup.fTablePosX }}></div>
         </>
     }
