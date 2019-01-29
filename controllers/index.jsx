@@ -93,6 +93,7 @@ class Main extends React.Component {
         }, () => {
             localStorage.setItem("aRooms", JSON.stringify(this.state.setups))
             alert("Your setup has been saved.")
+            this.cancel()
         })
     }
 
