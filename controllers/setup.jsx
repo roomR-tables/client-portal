@@ -90,24 +90,28 @@ export class Setup extends React.Component {
     }
 
     onSaveSetup() {
-        let fNewTablePosX = this.G_eTable.css("left");
-        let fNewTablePosY = this.G_eTable.css("top");
+        let fNewTablePosX = this.G_eTable.position().left;
+        let fNewTablePosY = this.G_eTable.position().top;
 
         this.props.saveSetup({ ...this.state.preferredSetup, fTablePosX: fNewTablePosX, fTablePosY: fNewTablePosY });
     }
 
     onExecute() {
-        let fNewTablePosX = this.G_eTableOutline.css("left");
-        let fNewTablePosY = this.G_eTableOutline.css("top");
+        // Convert pixels into cm
+        let onePixelInCm = this.G_eRoomHolder.height() / (this.state.preferredSetup.fRoomLength * 100);
+        let preferredSetup = Object.assign({}, this.state.preferredSetup);
+        let currentSetup = Object.assign({}, this.props.currentSetup);
+        
+        preferredSetup.fTablePosX = preferredSetup.fTablePosX * onePixelInCm;
+        preferredSetup.fTablePosY = preferredSetup.fTablePosY * onePixelInCm;
+        currentSetup.x_pos = currentSetup.x_pos * onePixelInCm;
+        currentSetup.y_pos = currentSetup.y_pos * onePixelInCm;
 
-        this.setTablePosition(fNewTablePosX, fNewTablePosY)
-    }
+        // Calculate path
+        let distanceX = preferredSetup.fTablePosX - currentSetup.x_pos;
+        let distanceY = preferredSetup.fTablePosY - currentSetup.y_pos;
 
-    setTablePosition(x, y) {
-        this.G_eTable.animate({
-            top: y,
-            left: x
-        }, "slow");
+        this.props.executeSetup(distanceX, distanceY);
     }
 
     render() {
@@ -123,7 +127,9 @@ export class Setup extends React.Component {
                             disabled={!this.props.editable}
                             id="roomNameInput"
                         />
-                        <h2>Drag the tables to their desired location.</h2>
+                        {this.props.editable ?
+                            <h2>Drag the tables to their desired location.</h2>
+                            : <h2>Press "Execute" to apply this setup</h2>}
                     </div>
                 </div>
             </div>

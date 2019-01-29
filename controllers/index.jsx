@@ -99,6 +99,10 @@ class Main extends React.Component {
         this.setState({ page: 'dashboard', selectedSetup: null })
     }
 
+    executeSetup(distanceX, distanceY) {
+        console.log(distanceX, distanceY)
+    }
+
     render() {
         return <>
             <div className="header col-12 bg-lime">
@@ -123,6 +127,7 @@ class Main extends React.Component {
                             currentSetup={this.state.currentSetup}
                             saveSetup={setup => this.saveSetup(setup)}
                             cancelSetup={_ => this.cancel()}
+                            executeSetup={(preferredSetup, currentSetup) => this.executeSetup(preferredSetup, currentSetup)}
                         /> : <p>Loading current setup...</p>}
                     </div>
                 </div>
