@@ -175,9 +175,9 @@ export class Setup extends React.Component {
                             </div>
 
                             <div className="col-12 buttonHandler">
-                                <input type="button" value="Cancel" className="GridButton bg-cyan" onClick={_ => this.props.cancelSetup()} />
-                                {!this.props.editable && <input type="button" value="execute" className="GridButton bg-cyan" onClick={_ => this.onExecute()} />}
-                                {this.props.editable && <input type="button" value="Save" className="GridButton bg-cyan" onClick={_ => this.onSaveSetup()} />}
+                                <input type="button" value="Cancel" className="GridButton bg-light" onClick={_ => this.props.cancelSetup()} />
+                                {!this.props.editable && <input type="button" value="execute" className="GridButton bg-lime" onClick={_ => this.onExecute()} />}
+                                {this.props.editable && <input type="button" value="Save" className="GridButton bg-lime" onClick={_ => this.onSaveSetup()} />}
                             </div>
                         </div>
                     </div>
