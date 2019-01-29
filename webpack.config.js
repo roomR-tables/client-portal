@@ -5,9 +5,9 @@ module.exports = {
     devtool: dev ? 'source-map' : false,
     mode: dev ? 'development' : 'production',
     output: {
-        path: require('path').resolve('dist'),
+        path: require('path').resolve('public', 'js'),
         filename: 'app.js',
-        publicPath: "dist/",
+        publicPath: "js/",
         library: 'app'
     },
     module: {
