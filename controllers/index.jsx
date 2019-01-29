@@ -95,6 +95,15 @@ class Main extends React.Component {
         })
     }
 
+    removeSetup(roomName) {
+        if (!confirm("This setup will be permanently removed. Are you sure?")) {
+            return;
+        }
+
+        let newSetups = this.state.setups.filter(s => s.sRoomName != roomName)
+        this.setState({ setups: newSetups }, () => localStorage.setItem("aRooms", JSON.stringify(newSetups)))
+    }
+
     cancel() {
         this.setState({ page: 'dashboard', selectedSetup: null })
     }
@@ -116,6 +125,7 @@ class Main extends React.Component {
                         <Dashboard
                             setups={this.state.setups}
                             loadSetup={(roomName, editable) => this.loadSetup(roomName, editable)}
+                            removeSetup={(roomName) => this.removeSetup(roomName)}
                             createSetup={_ => this.createSetup()}
                         />
                     </div>

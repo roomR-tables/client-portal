@@ -19,6 +19,9 @@ export class Dashboard extends React.Component {
                                     <div className="edit-btn bg-lime text-light text-center" onClick={(e) => { e.stopPropagation(); this.props.loadSetup(s.sRoomName, true) }}>
                                         <span className="fas fa-pen"></span>
                                     </div>
+                                    <div className="remove-btn bg-red text-light text-center" onClick={(e) => { e.stopPropagation(); this.props.removeSetup(s.sRoomName) }}>
+                                        <span className="fas fa-times"></span>
+                                    </div>
                                 </div>
                                 <div className="card-circle"></div>
                                 <div className="card-title text-dark">{s.sRoomName}</div>

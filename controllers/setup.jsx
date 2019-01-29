@@ -21,7 +21,7 @@ export class Setup extends React.Component {
         this.G_eTable = $("#table1");
         this.G_eTableOutline = $("#outline1");
 
-        this.resizeRoom()
+        this.resizeRoom();
     }
 
     // This makes sure that the current position is updated without a complete re-render of the component

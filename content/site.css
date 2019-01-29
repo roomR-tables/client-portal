@@ -124,6 +124,16 @@ p{ font-size: 12px; }
   z-index: 100;
 }
 
+.remove-btn{
+  width:25px;
+  height:25px;
+  margin-right: 5px;
+  float:right;
+  border-radius: 0 5px 0 5px;
+  cursor: pointer;
+  z-index: 100;
+}
+
 .roomWidthInputParent{
   float:none;
   height:50px;
