@@ -98,7 +98,7 @@ export class Setup extends React.Component {
 
     onExecute() {
         // Convert pixels into cm
-        let onePixelInCm = this.G_eRoomHolder.height() / (this.state.preferredSetup.fRoomLength * 100);
+        let onePixelInCm = (this.state.preferredSetup.fRoomLength * 100) / this.G_eRoomHolder.height()
         let preferredSetup = Object.assign({}, this.state.preferredSetup);
         let currentSetup = Object.assign({}, this.props.currentSetup);
         
