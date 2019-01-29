@@ -5,14 +5,19 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "http-server",
-    "start": "NODE_ENV=production node app.js",
     "build": "NODE_ENV=production webpack",
-    "build-watch": "webpack -w"
+    "build-watch": "webpack -w",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "restart": "pm2 restart ecosystem.config.js",
+    "stop": "pm2 stop ecosystem.config.js",
+    "kill": "pm2 kill",
+    "status": "pm2 status"
   },
   "author": "Niels van der Veer <n.i.vdveer@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
+    "pm2": "^3.2.9",
     "react": "^16.7.0",
     "react-dom": "^16.7.0"
   },
