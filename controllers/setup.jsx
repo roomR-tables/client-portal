@@ -3,7 +3,7 @@ import * as React from "react"
 export class Setup extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { preferredSetup: this.props.preferredSetup, currentSetup: this.props.currentSetup }
+        this.state = { preferredSetup: props.preferredSetup, currentSetup: props.currentSetup, icon: props.preferredSetup.icon }
     }
 
     componentDidMount() {
@@ -20,6 +20,13 @@ export class Setup extends React.Component {
         this.G_eRoomGridSideBar = $("#roomGridSideBar");
         this.G_eTable = $("#table1");
         this.G_eTableOutline = $("#outline1");
+
+        let icon_picker = $('.icp-dd');
+        icon_picker.iconpicker({ selected: this.state.icon });
+        icon_picker.on('iconpickerSelected', function (e) {
+            let iconClass = e.iconpickerInstance.options.fullClassFormatter(e.iconpickerValue)
+            this.setState({ icon: iconClass })
+        }.bind(this))
 
         this.resizeRoom();
     }
@@ -93,7 +100,12 @@ export class Setup extends React.Component {
         let fNewTablePosX = this.G_eTable.position().left;
         let fNewTablePosY = this.G_eTable.position().top;
 
-        this.props.saveSetup({ ...this.state.preferredSetup, fTablePosX: fNewTablePosX, fTablePosY: fNewTablePosY });
+        this.props.saveSetup({
+            ...this.state.preferredSetup,
+            fTablePosX: fNewTablePosX,
+            fTablePosY: fNewTablePosY,
+            icon: this.state.icon
+        });
     }
 
     onExecute() {
@@ -101,7 +113,7 @@ export class Setup extends React.Component {
         let onePixelInCm = (this.state.preferredSetup.fRoomLength * 100) / this.G_eRoomHolder.height()
         let preferredSetup = Object.assign({}, this.state.preferredSetup);
         let currentSetup = Object.assign({}, this.props.currentSetup);
-        
+
         preferredSetup.fTablePosX = preferredSetup.fTablePosX * onePixelInCm;
         preferredSetup.fTablePosY = preferredSetup.fTablePosY * onePixelInCm;
         currentSetup.x_pos = currentSetup.x_pos * onePixelInCm;
@@ -127,57 +139,64 @@ export class Setup extends React.Component {
                             disabled={!this.props.editable}
                             id="roomNameInput"
                         />
-                        {this.props.editable ?
+                        {this.props.editable ? <>
                             <h2>Drag the tables to their desired location.</h2>
+                            <div className="btn-group">
+                                <button type="button" className="btn btn-secundary btn-lg iconpicker-component"><i
+                                    className={this.state.icon}></i></button>
+                                <button type="button" className="icp icp-dd btn btn-secundary btn-lg dropdown-toggle"
+                                    data-selected="fa-car" data-toggle="dropdown">
+                                    <span className="caret"></span>
+                                    <span className="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div className="dropdown-menu"></div>
+                            </div>
+                        </>
                             : <h2>Press "Execute" to apply this setup</h2>}
                     </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col-12">
-                    <div className="col-4 float-left"></div>
+                <div className="row">
                 </div>
-                <div className="col-2">
-                    <div className="col-2 height-spacer"></div>
-                </div>
-                <div className="col-8">
-                    <div id="room-parent">
-                        <div id="room">
-                            <div id="roomGrid">
-                                {this.drawTable(this.state.preferredSetup.fTableWidth, this.state.preferredSetup.fTableLength)}
-                            </div>
-                            <div className=" col-12" id="roomGridTopBar">
-                                <div className="arrowLeft">◄</div>
-                                <div className="arrowRight">►</div>
-                                <div className="roomWidthInputParent">
+                <div className="row">
+                    <div className="col-12">
+                        <div id="room-parent">
+                            <div id="room">
+                                <div id="roomGrid">
+                                    {this.drawTable(this.state.preferredSetup.fTableWidth, this.state.preferredSetup.fTableLength)}
+                                </div>
+                                <div className=" col-12" id="roomGridTopBar">
+                                    <div className="arrowLeft">◄</div>
+                                    <div className="arrowRight">►</div>
+                                    <div className="roomWidthInputParent">
+                                        <input
+                                            type="number"
+                                            id="roomWidthInput"
+                                            value={this.state.preferredSetup.fRoomWidth}
+                                            placeholder="Insert Width"
+                                            disabled={!this.props.editable}
+                                            onChange={e => this.onChangeRoomDimensions(e.currentTarget.value, this.state.preferredSetup.fRoomLength)}
+                                        />
+                                    </div>
+                                </div>
+                                <div id="roomGridSideBar">
+                                    <div className="arrowUp">▲</div>
+                                    <div className="col-12" style={{ height: '20%' }}></div>
                                     <input
                                         type="number"
-                                        id="roomWidthInput"
-                                        value={this.state.preferredSetup.fRoomWidth}
-                                        placeholder="Insert Width"
+                                        id="roomLengthInput"
+                                        value={this.state.preferredSetup.fRoomLength}
+                                        placeholder="Length"
                                         disabled={!this.props.editable}
-                                        onChange={e => this.onChangeRoomDimensions(e.currentTarget.value, this.state.preferredSetup.fRoomLength)}
+                                        onChange={e => this.onChangeRoomDimensions(this.state.preferredSetup.fRoomWidth, e.currentTarget.value)}
                                     />
+                                    <div className="arrowDown">▼</div>
                                 </div>
-                            </div>
-                            <div id="roomGridSideBar">
-                                <div className="arrowUp">▲</div>
-                                <div className="col-12" style={{ height: '20%' }}></div>
-                                <input
-                                    type="number"
-                                    id="roomLengthInput"
-                                    value={this.state.preferredSetup.fRoomLength}
-                                    placeholder="Length"
-                                    disabled={!this.props.editable}
-                                    onChange={e => this.onChangeRoomDimensions(this.state.preferredSetup.fRoomWidth, e.currentTarget.value)}
-                                />
-                                <div className="arrowDown">▼</div>
-                            </div>
 
-                            <div className="col-12 buttonHandler">
-                                <input type="button" value="Cancel" className="GridButton bg-light" onClick={_ => this.props.cancelSetup()} />
-                                {!this.props.editable && <input type="button" value="execute" className="GridButton bg-lime" onClick={_ => this.onExecute()} />}
-                                {this.props.editable && <input type="button" value="Save" className="GridButton bg-lime" onClick={_ => this.onSaveSetup()} />}
+                                <div className="col-12 buttonHandler">
+                                    <input type="button" value="Cancel" className="GridButton bg-light" onClick={_ => this.props.cancelSetup()} />
+                                    {!this.props.editable && <input type="button" value="execute" className="GridButton bg-lime" onClick={_ => this.onExecute()} />}
+                                    {this.props.editable && <input type="button" value="Save" className="GridButton bg-lime" onClick={_ => this.onSaveSetup()} />}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -23,7 +23,7 @@ export class Dashboard extends React.Component {
                                         <span className="fas fa-times"></span>
                                     </div>
                                 </div>
-                                <div className="card-circle"></div>
+                                <div className="card-circle"><span className={s.icon}></span></div>
                                 <div className="card-title text-dark">{s.sRoomName}</div>
                             </div>
                         </div>

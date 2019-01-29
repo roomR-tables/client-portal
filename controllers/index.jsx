@@ -58,7 +58,8 @@ class Main extends React.Component {
                 fTableWidth: 0.70,
                 fTableLength: 0.50,
                 fTablePosX: 0,
-                fTablePosY: 0
+                fTablePosY: 0,
+                icon: "fas fa-heart"
             },
             isNew: true,
             editable: true,
