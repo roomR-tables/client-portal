@@ -3,7 +3,7 @@ import * as React from "react"
 export class Dashboard extends React.Component {
     render() {
         return (
-            <div className="container-fluid col-8">
+            <div className="container-fluid col-sm-12">
                 <div className="row">
                     <div className="page-title text-dark">
                         <h1 style={{ fontWeight: 800 }}>Preset overview</h1>

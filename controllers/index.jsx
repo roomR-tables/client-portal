@@ -117,8 +117,8 @@ class Main extends React.Component {
     render() {
         return <>
             <div className="header col-12 bg-lime">
-                <div className="row">
-                    <div className="logo col-5"></div>
+                <div className="logo">
+                    <img src="/images/vroom_logo.svg" alt="vroom Logo" />
                 </div>
             </div>
             <div id="content">

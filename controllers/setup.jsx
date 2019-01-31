@@ -128,7 +128,7 @@ export class Setup extends React.Component {
 
     render() {
         return <>
-            <div className="container-fluid col-8 center">
+            <div className="container-fluid col-sm-12 center">
                 <div className="row">
                     <div className="page-title text-dark">
                         <input

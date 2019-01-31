@@ -53,14 +53,26 @@ input:disabled {
 }
 
 .header{
-    height:50px;
+  height:10px;
+  z-index: 100;
 }
 
 .logo{
-  height:40px;
-  background-image: url("../images/roomr_logo.svg");
+  background-color: #acdd44;
   background-repeat: no-repeat;
   background-size: contain;
+  display: inline-block;
+  padding: 10px;
+}
+
+.logo img {
+  height: 100px;
+}
+
+@media(min-width: 1024px) {
+  .logo img {
+    height: 140px;
+  }
 }
 
 /* 01-07-19 */
@@ -125,7 +137,7 @@ input:disabled {
 }
 
 .cardLoader {
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .card-title{
