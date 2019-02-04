@@ -111,7 +111,7 @@ class Main extends React.Component {
     }
 
     executeSetup(distanceX, distanceY) {
-        let movements = [(distanceY < 0 ? 'B' : 'F') + distanceY.toFixed(), (distanceX < 0 ? 'L' : 'R') + distanceX.toFixed()]
+        let movements = [(distanceY < 0 ? 'B' : 'F') + Math.abs(distanceY.toFixed()), (distanceX < 0 ? 'L' : 'R') + Math.abs(distanceX.toFixed())]
         this.mqttClient.send('move', JSON.stringify({ cmd: 'move', movements: movements}))
 
         console.log(movements)
