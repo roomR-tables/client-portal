@@ -24,7 +24,7 @@ export class MqttClient {
 
     send(topic, message) {
         if (this.client.isConnected()) {
-            return this.client.send(topic, message)
+            return this.client.send(topic, message, 2)
         }
 
         return false

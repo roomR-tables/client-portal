@@ -5,6 +5,7 @@ import { Dashboard } from "./dashboard.jsx"
 import { Setup } from "./setup.jsx"
 import { isArray } from "util"
 import { MqttClient } from "./mqtt"
+import "babel-polyfill"
 
 class Main extends React.Component {
     constructor(props) {
