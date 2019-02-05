@@ -19,8 +19,12 @@ class Main extends React.Component {
         let sRooms = localStorage.getItem("aRooms");
         let jRooms = JSON.parse(sRooms);
 
-        this.setState({ setups: !jRooms || !isArray(jRooms) ? [] : jRooms })
-        setInterval(() => this.mqttClient.send("cc/cmd", JSON.stringify({ cmd: "request_status" })), 500)
+        let currentPosition = localStorage.getItem("currentPositionInCm");
+
+        this.setState({
+            setups: !jRooms || !isArray(jRooms) ? [] : jRooms,
+            currentSetup: !currentPosition ? { x_pos: 0, y_pos: 0 } : JSON.parse(currentPosition)
+        })
     }
 
     onMqttMessage(message) {
@@ -28,7 +32,7 @@ class Main extends React.Component {
             let jMessageBody = JSON.parse(message.payloadString)
             console.log(jMessageBody)
             switch (message.destinationName) {
-                case "cc/status":
+                case "table/status":
                     this.setState({ currentSetup: jMessageBody })
                     return;
             }
@@ -112,8 +116,17 @@ class Main extends React.Component {
     }
 
     executeSetup(distanceX, distanceY) {
-        let movements = [(distanceY < 0 ? 'B' : 'F') + Math.abs(distanceY.toFixed()), (distanceX < 0 ? 'L' : 'R') + Math.abs(distanceX.toFixed())]
-        this.mqttClient.send('cc/cmd', JSON.stringify({ cmd: 'move', movements: movements}))
+        let movements = []
+
+        if (distanceX !== 0) {
+            movements.push((distanceX < 0 ? 'R' : 'L') + Math.abs(distanceX.toFixed()))
+        }
+
+        if (distanceY !== 0) {
+            movements.push((distanceY < 0 ? 'B' : 'F') + Math.abs(distanceY.toFixed()))
+        }
+
+        this.mqttClient.send('table/movement', JSON.stringify({ movements: movements }))
 
         console.log(movements)
     }

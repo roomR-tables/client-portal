@@ -1,18 +1,16 @@
 export class MqttClient {
     constructor(onMessageArrived) {
-        this.client = new Paho.MQTT.Client("raspberrypi.local", 9001, "cc");
+        this.client = new Paho.MQTT.Client("iot.eclipse.org", 443, "/ws", "cc");
         this.client.onConnectionLost = (responseObject) => this.onConnectionLost(responseObject);
         this.client.onMessageArrived = (message) => onMessageArrived(message);
-        this.client.connect({ onSuccess: () => this.onConnect() });
+        this.client.connect({ useSSL: true, onSuccess: () => this.onConnect() });
     }
 
     onConnect() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("client connected");
 
-        this.client.subscribe("cc/status");
-        this.client.subscribe("cc/position");
-        this.send("cc/cmd", JSON.stringify({ cmd: "request_status" }))
+        this.client.subscribe("table/position");
     }
 
     // called when the client loses its connection

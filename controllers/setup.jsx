@@ -3,7 +3,12 @@ import * as React from "react"
 export class Setup extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { preferredSetup: props.preferredSetup, currentSetup: props.currentSetup, icon: props.preferredSetup.icon }
+        this.state = {
+            preferredSetup: props.preferredSetup,
+            currentSetup: props.currentSetup,
+            icon: props.preferredSetup.icon,
+            roomHolderHeight: 0
+        }
     }
 
     componentDidMount() {
@@ -34,6 +39,12 @@ export class Setup extends React.Component {
     // This makes sure that the current position is updated without a complete re-render of the component
     static getDerivedStateFromProps(props, state) {
         if (props.currentSetup != state.currentSetup) {
+            // Convert to pixels
+            localStorage.setItem(
+                "currentPositionInCm",
+                JSON.stringify(props.currentSetup)
+            )
+
             return {
                 ...state,
                 currentSetup: props.currentSetup
@@ -55,7 +66,7 @@ export class Setup extends React.Component {
             </>
         }
 
-        let currentSetup = this.props.currentSetup
+        let currentSetup = { x_pos: this.cmToPixels(this.props.currentSetup.x_pos), y_pos: this.cmToPixels(this.props.currentSetup.y_pos) }
 
         return <>
             <div id="table1" className={`table table--animated bg-lime`} style={{ width: `${fWidth}%`, height: `${fLength}%`, top: currentSetup.y_pos, left: currentSetup.x_pos }}>01</div>
@@ -85,6 +96,8 @@ export class Setup extends React.Component {
         this.G_eRoomGridSideBar.animate({
             "height": "100%"
         });
+
+        this.setState({ roomHolderHeight: this.G_eRoomHolder.height() })
     }
 
     onChangeRooomName(sRoomName) {
@@ -108,20 +121,31 @@ export class Setup extends React.Component {
         });
     }
 
+    pixelsToCm(pixels) {
+        let onePixelInCm = (this.state.preferredSetup.fRoomLength * 100) / this.state.roomHolderHeight
+
+        return pixels * onePixelInCm;
+    }
+
+    cmToPixels(centimers) {
+        let oneCmInPixels = this.state.roomHolderHeight / (this.state.preferredSetup.fRoomLength * 100)
+
+        return centimers * oneCmInPixels;
+    }
+
     onExecute() {
         // Convert pixels into cm
-        let onePixelInCm = (this.state.preferredSetup.fRoomLength * 100) / this.G_eRoomHolder.height()
         let preferredSetup = Object.assign({}, this.state.preferredSetup);
         let currentSetup = Object.assign({}, this.props.currentSetup);
 
-        preferredSetup.fTablePosX = preferredSetup.fTablePosX * onePixelInCm;
-        preferredSetup.fTablePosY = preferredSetup.fTablePosY * onePixelInCm;
-        currentSetup.x_pos = currentSetup.x_pos * onePixelInCm;
-        currentSetup.y_pos = currentSetup.y_pos * onePixelInCm;
+        preferredSetup.fTablePosX = this.pixelsToCm(preferredSetup.fTablePosX);
+        preferredSetup.fTablePosY = this.pixelsToCm(preferredSetup.fTablePosY);
+        currentSetup.x_pos = this.pixelsToCm(currentSetup.x_pos);
+        currentSetup.y_pos = this.pixelsToCm(currentSetup.y_pos);
 
         // Calculate path
-        let distanceX = preferredSetup.fTablePosX - currentSetup.x_pos;
-        let distanceY = preferredSetup.fTablePosY - currentSetup.y_pos;
+        let distanceX = currentSetup.x_pos - preferredSetup.fTablePosX;
+        let distanceY = currentSetup.y_pos - preferredSetup.fTablePosY;
 
         this.props.executeSetup(distanceX, distanceY);
     }
