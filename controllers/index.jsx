@@ -29,11 +29,27 @@ class Main extends React.Component {
 
     onMqttMessage(message) {
         try {
-            let jMessageBody = JSON.parse(message.payloadString)
-            console.log(jMessageBody)
+            let messageBody = message.payloadString
+            console.log(message)
             switch (message.destinationName) {
                 case "table/status":
-                    this.setState({ currentSetup: jMessageBody })
+                    // Expects is a command F300, where 300 is in centimeters
+                    let direction = messageBody.substring(0, 1)
+                    let cm = Number(messageBody.substring(1))
+
+                    if (direction === 'R') {
+                        var newSetup = { x_pos: this.state.currentSetup.x_pos + cm, y_pos: this.state.currentSetup.y_pos }
+                    } else if (direction === 'L') {
+                        var newSetup = { x_pos: this.state.currentSetup.x_pos - cm, y_pos: this.state.currentSetup.y_pos }
+                    } else if (direction == 'F') {
+                        var newSetup = { x_pos: this.state.currentSetup.x_pos, y_pos: this.state.currentSetup.y_pos - cm }
+                    } else {
+                        var newSetup = { x_pos: this.state.currentSetup.x_pos, y_pos: this.state.currentSetup.y_pos + cm }
+                    }
+
+                    console.log(newSetup)
+
+                    this.setState({ currentSetup: newSetup })
                     return;
             }
         } catch (e) {
