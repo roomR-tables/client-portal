@@ -140,8 +140,8 @@ export class Setup extends React.Component {
 
         preferredSetup.fTablePosX = this.pixelsToCm(preferredSetup.fTablePosX);
         preferredSetup.fTablePosY = this.pixelsToCm(preferredSetup.fTablePosY);
-        currentSetup.x_pos = this.pixelsToCm(currentSetup.x_pos);
-        currentSetup.y_pos = this.pixelsToCm(currentSetup.y_pos);
+        currentSetup.x_pos = currentSetup.x_pos;
+        currentSetup.y_pos = currentSetup.y_pos;
 
         // Calculate path
         let distanceX = currentSetup.x_pos - preferredSetup.fTablePosX;

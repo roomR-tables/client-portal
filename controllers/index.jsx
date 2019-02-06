@@ -76,8 +76,8 @@ class Main extends React.Component {
                 sRoomName: "",
                 fRoomWidth: 10,
                 fRoomLength: 5,
-                fTableWidth: 0.70,
-                fTableLength: 0.50,
+                fTableWidth: 0.43,
+                fTableLength: 0.26,
                 fTablePosX: 0,
                 fTablePosY: 0,
                 icon: "fas fa-heart"
@@ -142,9 +142,7 @@ class Main extends React.Component {
             movements.push((distanceY < 0 ? 'B' : 'F') + Math.abs(distanceY.toFixed()))
         }
 
-        this.mqttClient.send('table/movement', JSON.stringify({ movements: movements }))
-
-        console.log(movements)
+        movements.length > 0 && this.mqttClient.send('table/movement', movements.reduce((reduction, m) => m + ";" + reduction) + ';')
     }
 
     render() {
