@@ -1,15 +1,17 @@
 export class MqttClient {
-    constructor(onMessageArrived) {
-        this.client = new Paho.MQTT.Client("178.128.254.40", 9001, "/", "cc");
+    constructor(onMessageArrived, onConnectionChanged) {
+        this.client = new Paho.Client("178.128.254.40", 9001, "/", "cc" + + parseInt(Math.random() * 100));
+        this.onConnectionChanged = onConnectionChanged
+
         this.client.onConnectionLost = (responseObject) => this.onConnectionLost(responseObject);
         this.client.onMessageArrived = (message) => onMessageArrived(message);
-        this.client.connect({ onSuccess: () => this.onConnect() });
+        this.client.connect({ reconnect: true, onSuccess: () => this.onConnect() });
     }
 
     onConnect() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("client connected");
-
+        this.onConnectionChanged('connected')
         this.client.subscribe("table/status");
     }
 
@@ -18,6 +20,8 @@ export class MqttClient {
         if (responseObject.errorCode !== 0) {
             console.error("onConnectionLost:" + responseObject.errorMessage);
         }
+
+        this.onConnectionChanged('lost')
     }
 
     send(topic, message) {

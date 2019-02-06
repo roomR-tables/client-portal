@@ -75,6 +75,21 @@ input:disabled {
   }
 }
 
+.connection {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+}
+
+.connection i {
+  color: #8d2d2d;
+  font-size: 35px;
+}
+
+.connection--hidden {
+  display: none;
+}
+
 /* 01-07-19 */
 #content{
   margin:0 auto;

@@ -10,9 +10,17 @@ import "babel-polyfill"
 class Main extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { page: 'dashboard', isNew: false, editable: true, setups: [], currentSetup: [], selectedSetup: null }
+        this.state = {
+            page: 'dashboard',
+            isNew: false,
+            editable: true,
+            setups: [],
+            currentSetup: [],
+            selectedSetup: null,
+            status: 'lost'
+        }
 
-        this.mqttClient = new MqttClient((message) => this.onMqttMessage(message))
+        this.mqttClient = new MqttClient((message) => this.onMqttMessage(message), (connection) => this.setState({ status: connection }))
     }
 
     componentDidMount() {
@@ -153,6 +161,9 @@ class Main extends React.Component {
                 </div>
             </div>
             <div id="content">
+                <div className={`connection ${this.state.status == 'lost' ? '' : 'connection--hidden'}`}>
+                    <i className="fas fa-wifi"></i>
+                </div>
                 <div id="scroller" style={{ marginLeft: this.state.page != 'dashboard' ? '-100%' : 0 }}>
                     <div id="content1">
                         <Dashboard
