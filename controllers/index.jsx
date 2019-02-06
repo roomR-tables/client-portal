@@ -164,6 +164,8 @@ class Main extends React.Component {
                 <div className={`connection ${this.state.status == 'lost' ? '' : 'connection--hidden'}`}>
                     <i className="fas fa-wifi"></i>
                 </div>
+                <div className="hidden-button" onClick={() => { localStorage.clear(); location.reload() }}>
+                </div>
                 <div id="scroller" style={{ marginLeft: this.state.page != 'dashboard' ? '-100%' : 0 }}>
                     <div id="content1">
                         <Dashboard

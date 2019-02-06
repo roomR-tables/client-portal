@@ -90,6 +90,18 @@ input:disabled {
   display: none;
 }
 
+.hidden-button {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 70px;
+}
+
+.hidden-button button {
+  height: 50px;
+}
+
 /* 01-07-19 */
 #content{
   margin:0 auto;
